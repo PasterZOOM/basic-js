@@ -1,4 +1,4 @@
-const { NotImplementedError } = require('../extensions/index.js');
+const {NotImplementedError} = require('../extensions/index.js');
 
 /**
  * In the popular Minesweeper game you have a board with some mines and those cells
@@ -23,11 +23,80 @@ const { NotImplementedError } = require('../extensions/index.js');
  *  [1, 1, 1]
  * ]
  */
-function minesweeper(/* matrix */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function minesweeper(matrix) {
+    const obj = {}
+    matrix.forEach((row, rowIndex) => obj[rowIndex] = {})
+    Object.keys(obj).forEach((rowKey, rowIndex) => {
+        matrix[rowKey].forEach((letter, index) => {
+            obj[rowKey][index] = matrix[rowKey][index]
+        })
+    })
+
+    for (let i = 0; i < matrix.length; i += 1) {
+        for (let j = 0; j < matrix[i].length; j += 1) {
+            if (!obj[i][j]) {
+                obj[i][j] = 0
+            }
+        }
+    }
+
+    for (let i = 0; i < matrix.length; i += 1) {
+        for (let j = 0; j < matrix[i].length; j += 1) {
+            if (obj[i][j] === true) {
+                if (obj[i - 1]) {
+                    if (typeof obj[i - 1][j - 1] === 'number') {
+                        obj[i - 1][j - 1] += 1
+                    }
+                    if (typeof obj[i - 1][j] === 'number') {
+                        obj[i - 1][j] += 1
+                    }
+                    if (typeof obj[i - 1][j + 1] === 'number') {
+                        obj[i - 1][j + 1] += 1
+                    }
+                }
+
+
+                if (typeof obj[i][j - 1] === 'number') {
+                    obj[i][j - 1] += 1
+                }
+                if (typeof obj[i][j + 1] === 'number') {
+                    obj[i][j + 1] += 1
+                }
+
+                if (obj[i + 1]) {
+                    if (typeof obj[i + 1][j - 1] === 'number') {
+                        obj[i + 1][j - 1] += 1
+                    }
+                    if (typeof obj[i + 1][j] === 'number') {
+                        obj[i + 1][j] += 1
+                    }
+                    if (typeof obj[i + 1][j + 1] === 'number') {
+                        obj[i + 1][j + 1] += 1
+                    }
+                }
+            }
+        }
+    }
+
+    for (let i = 0; i < matrix.length; i += 1) {
+        for (let j = 0; j < matrix[i].length; j += 1) {
+            if (obj[i][j] === true) {
+                obj[i][j] = 1
+            }
+        }
+    }
+
+    const res = []
+    for (let i = 0; i < matrix.length; i += 1) {
+        const row = []
+        for (let j = 0; j < matrix[i].length; j += 1) {
+            row.push(obj[i][j])
+        }
+        res.push(row)
+    }
+    return res
 }
 
 module.exports = {
-  minesweeper
+    minesweeper
 };
